@@ -11,7 +11,7 @@ variable "cluster_version" {
 }
 
 variable "alb_dns_name" {
-  default = "k8s-fampayshared-1883200fb1-1554670538.us-east-1.elb.amazonaws.com"
+  default = "fampay-alb-2139775353.us-east-1.elb.amazonaws.com"
 }
 
 variable "alb_hosted_zone_id" {
