@@ -25,7 +25,7 @@ spec:
         env:
         envFrom:
         - secretRef:
-            name: bran-secret
+            name: bran-secrets
         image: public.ecr.aws/q0k4e9h0/fampay-bran:v1.0.0
         imagePullPolicy: IfNotPresent
         ports:
