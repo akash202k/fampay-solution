@@ -16,13 +16,15 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: bran.fampay-bran.svc.cluster.local  # cross-namespace service {svcname.namespace}
+                name: bran 
+                namespace: fampay-bran
                 port:
                   number: 8000
           - path: /hodr
             pathType: Prefix
             backend:
               service:
-                name: hodr.fampay-hodr.svc.cluster.local
+                name: hodr
+                namespace: fampay-hodr
                 port:
                   number: 8080
