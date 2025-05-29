@@ -2,7 +2,7 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: bran-hpa
-  namespace: fampay-dev
+  namespace: fampay-bran
 spec:
   maxReplicas: 5
   metrics:

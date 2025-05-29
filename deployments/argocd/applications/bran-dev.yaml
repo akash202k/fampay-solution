@@ -15,7 +15,7 @@ spec:
     helm: {}
   destination:
     server: https://kubernetes.default.svc
-    namespace: fampay-dev
+    namespace: fampay-bran
   
   syncPolicy:
     automated:
