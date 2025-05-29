@@ -1,8 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: fampay-ingress
-  namespace: fampay-ingress  
+  name: hodr-ingress
+  namespace: fampay-hodr
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
@@ -10,22 +10,16 @@ metadata:
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/certificate-arn: 'arn:aws:acm:us-east-1:982534355700:certificate/f744adec-d79a-4af8-9476-c507f5a7fe9f'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/group.name: fampay-shared  # Same ALB group
 spec:
   rules:
-    - host: {{ .Values.domain }}
+    - host: dayxcode.com
       http:
         paths:
-          - path: /bran
-            pathType: Prefix
-            backend:
-              service:
-                name: bran-external 
-                port:
-                  number: 8000
           - path: /hodr
             pathType: Prefix
             backend:
               service:
-                name: hodr-external
+                name: hodr  # Direct reference in same namespace
                 port:
                   number: 8080

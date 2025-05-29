@@ -11,7 +11,7 @@ variable "cluster_version" {
 }
 
 variable "alb_dns_name" {
-  default = "k8s-fampayin-fampayin-21113d1298-703022719.us-east-1.elb.amazonaws.com"
+  default = "k8s-fampayin-fampayin-21113d1298-628572169.us-east-1.elb.amazonaws.com"
 }
 
 variable "alb_hosted_zone_id" {
