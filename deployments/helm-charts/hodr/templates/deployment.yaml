@@ -25,7 +25,7 @@ spec:
         env:
         - name: HOST_ADDR
           value: 0.0.0.0:8080
-        image: public.ecr.aws/q0k4e9h0/fampay-hodr:v1.0.0
+        image: public.ecr.aws/q0k4e9h0/fampay-hodr:v1.0.1
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
