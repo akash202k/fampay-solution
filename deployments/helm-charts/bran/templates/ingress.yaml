@@ -22,7 +22,7 @@ metadata:
     alb.ingress.kubernetes.io/healthy-threshold-count: '2'
     alb.ingress.kubernetes.io/unhealthy-threshold-count: '2' 
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
-    alb.ingress.kubernetes.io/certificate-arn: {{ .Values.ingress.ssl_arn }}
+    alb.ingress.kubernetes.io/certificate-arn: 'arn:aws:acm:us-east-1:982534355700:certificate/f744adec-d79a-4af8-9476-c507f5a7fe9f'
     alb.ingress.kubernetes.io/ssl-redirect: '443' 
     # nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
