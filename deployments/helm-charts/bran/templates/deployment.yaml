@@ -26,7 +26,7 @@ spec:
         envFrom:
         - secretRef:
             name: bran-secrets
-        image: public.ecr.aws/q0k4e9h0/fampay-bran:v1.0.2
+        image: public.ecr.aws/q0k4e9h0/fampay-bran:v1.0.3
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8000
