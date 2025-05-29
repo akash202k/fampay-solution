@@ -1,31 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres-db
+  name: {{ .Values.database.name }}
   labels:
-    app: postgres-db
+    app: {{ .Values.database.name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: postgres-db
+      app: {{ .Values.database.name }}
   template:
     metadata:
       labels:
-        app: postgres-db
+        app: {{ .Values.database.name }}
     spec:
       containers:
         - name: postgres
-          image: postgres:15
+          image: {{ .Values.database.image }}
           ports:
-            - containerPort: 5432
+            - containerPort: {{ .Values.database.port }}
           env:
             - name: POSTGRES_DB
-              value: "fampay"
+              value: {{ .Values.database.dbName }}
             - name: POSTGRES_USER
-              value: "akash"
+              value: {{ .Values.database.user }}
             - name: POSTGRES_PASSWORD
-              value: "akashpass"
+              value: {{ .Values.database.password }}
           volumeMounts:
             - name: postgres-data
               mountPath: /var/lib/postgresql/data
@@ -37,13 +37,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres-db-svc
+  name: {{ .Values.database.name }}-svc
   labels:
-    app: postgres-db
+    app: {{ .Values.database.name }}
 spec:
   type: ClusterIP
   ports:
-    - port: 5432
-      targetPort: 5432
+    - port: {{ .Values.database.port }}
+      targetPort: {{ .Values.database.port }}
   selector:
-    app: postgres-db
+    app: {{ .Values.database.name }}

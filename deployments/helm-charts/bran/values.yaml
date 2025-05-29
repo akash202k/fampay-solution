@@ -1,17 +1,25 @@
-replicaCount: 1
+# Application Configuration
+app:
+  name: bran
+  namespace: fampay-bran
 
+# Image Configuration
 image:
   repository: public.ecr.aws/q0k4e9h0/fampay-bran
-  tag: dev-latest
-  pullPolicy: Always
+  tag: v1.0.3
+  pullPolicy: IfNotPresent
 
-namespace: fampay-bran  # Consistent namespace
-
+# Service Configuration
 service:
   type: ClusterIP
   port: 8000
   targetPort: 8000
 
+# Deployment Configuration
+deployment:
+  replicaCount: 1
+  
+# Resources
 resources:
   limits:
     cpu: 200m
@@ -20,17 +28,36 @@ resources:
     cpu: 100m
     memory: 256Mi
 
-autoscaling:
-  enabled: true
+# HPA Configuration
+hpa:
   minReplicas: 1
-  maxReplicas: 5
-  targetCPUUtilizationPercentage: 70
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 50
 
-nodeSelector:
-  node-type: spot
+# Ingress Configuration
+ingress:
+  host: dayxcode.com
+  certificateArn: 'arn:aws:acm:us-east-1:982534355700:certificate/f744adec-d79a-4af8-9476-c507f5a7fe9f'
+  loadBalancerName: fampay-alb
+  groupName: fampay-shared
 
-tolerations:
-  - key: "node-type"
-    operator: "Equal"
-    value: "spot"
-    effect: "NoSchedule"
+# Health Check Configuration
+healthCheck:
+  path: /bran/metrics
+  port: 8000
+
+# Database Configuration
+database:
+  name: postgres-db
+  image: postgres:15
+  port: 5432
+  dbName: fampay
+  user: akash
+  password: akashpass
+
+# Secrets Configuration
+secrets:
+  secretKey: django-insecure-8j=hrs#^z0t%#1^89isbgqeddf2_zw!#zh45rz-=h&u%ze)o3e
+  allowedHosts: "*"
+  debug: "true"
+  timeZone: "UTC"
