@@ -65,12 +65,12 @@ module "eks" {
     # Spot instance node group (for cost savings)
     spot = {
       name         = "spot-nodes"
-      desired_size = 2
-      max_size     = 2
+      desired_size = 4
+      max_size     = 5
       min_size     = 1
 
       # Mix of instance types for better spot availability
-      instance_types = ["t3.small", "t2.small", "t2.medium"]
+      instance_types = ["t3.small","t2.medium"]
       capacity_type  = "SPOT"
       subnet_ids     = module.vpc.public_subnets
 
