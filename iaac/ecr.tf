@@ -20,7 +20,7 @@
 
 
 locals {
-  applications = ["hodr", "bran"]  # Your two applications
+  applications = ["hodr", "bran"] # Your two applications
 }
 
 resource "aws_ecrpublic_repository" "fampay_apps" {

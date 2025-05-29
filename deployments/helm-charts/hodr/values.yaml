@@ -4,7 +4,7 @@ image:
   tag: dev-latest
   pullPolicy: Always
 
-namespace: fampay-dev # Consistent namespace
+namespace: fampay-hodr # Consistent namespace
 
 service:
   type: ClusterIP

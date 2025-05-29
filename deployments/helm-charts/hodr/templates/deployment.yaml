@@ -4,11 +4,9 @@ metadata:
   labels:
     app: hodr
   name: hodr
-  namespace: fampay-dev
+  namespace: fampay-hodr
 spec:
-  progressDeadlineSeconds: 600
-  replicas: 2
-  revisionHistoryLimit: 10
+  replicas: 1
   selector:
     matchLabels:
       app: hodr
@@ -23,35 +21,15 @@ spec:
         app: hodr
     spec:
       containers:
-      - env:
+      - name: hodr
+        env:
         - name: HOST_ADDR
           value: 0.0.0.0:8080
-        image: hodr-app:latest
+        image: public.ecr.aws/q0k4e9h0/fampay-hodr:v1.0.0
         imagePullPolicy: IfNotPresent
-        livenessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /hodr/
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 30
-          periodSeconds: 15
-          successThreshold: 1
-          timeoutSeconds: 3
-        name: hodr
         ports:
         - containerPort: 8080
           protocol: TCP
-        readinessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /hodr/
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 15
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 2
         resources:
           limits:
             cpu: 200m
@@ -59,10 +37,4 @@ spec:
           requests:
             cpu: 50m
             memory: 128Mi
-        terminationMessagePath: /dev/termination-log
-        terminationMessagePolicy: File
-      dnsPolicy: ClusterFirst
       restartPolicy: Always
-      schedulerName: default-scheduler
-      securityContext: {}
-      terminationGracePeriodSeconds: 30

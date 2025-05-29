@@ -45,14 +45,14 @@ module "eks" {
       desired_size   = 1
       max_size       = 2
       min_size       = 1
-      instance_types = ["t3.small"]  # Slightly better than t2.small
+      instance_types = ["t3.small"] # Slightly better than t2.small
       capacity_type  = "ON_DEMAND"
       subnet_ids     = module.vpc.public_subnets
-      
+
       labels = {
         node-type = "on-demand"
       }
-      
+
       # taints = [
       #   {
       #     key    = "node-type"
@@ -61,27 +61,27 @@ module "eks" {
       #   }
       # ]
     }
-    
+
     # Spot instance node group (for cost savings)
     spot = {
-      name           = "spot-nodes"
-      desired_size   = 2
-      max_size       = 2
-      min_size       = 1
-      
+      name         = "spot-nodes"
+      desired_size = 2
+      max_size     = 2
+      min_size     = 1
+
       # Mix of instance types for better spot availability
-      instance_types = ["t3.small","t2.small", "t2.medium"]
+      instance_types = ["t3.small", "t2.small", "t2.medium"]
       capacity_type  = "SPOT"
       subnet_ids     = module.vpc.public_subnets
-      
+
       # Spot-specific configuration
       spot_allocation_strategy = "diversified"
-      
+
       labels = {
         node-type = "spot"
         lifecycle = "spot"
       }
-      
+
       # taints = [
       #   {
       #     key    = "node-type"
@@ -89,7 +89,7 @@ module "eks" {
       #     effect = "NO_SCHEDULE"
       #   }
       # ]
-      
+
       # User data to handle spot interruptions gracefully
       pre_bootstrap_user_data = <<-EOT
         #!/bin/bash
