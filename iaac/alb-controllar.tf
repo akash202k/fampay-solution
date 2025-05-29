@@ -40,15 +40,15 @@ resource "aws_iam_role_policy_attachment" "aws_load_balancer_controller_ec2_poli
   role       = aws_iam_role.aws_load_balancer_controller.name
 }
 
-# resource "aws_iam_policy" "aws_load_balancer_controller" {
-#   name   = "${var.cluster_name}-aws-load-balancer-controller-policy"
-#   policy = file("${path.module}/iam-policies/aws-load-balancer-controller-policy.json")
-# }
+resource "aws_iam_policy" "aws_load_balancer_controller" {
+  name   = "${var.cluster_name}-aws-load-balancer-controller-policy"
+  policy = file("${path.module}/iam-policies/aws-load-balancer-controller-elb-waf-policy.json")
+}
 
-# resource "aws_iam_role_policy_attachment" "aws_load_balancer_controller" {
-#   policy_arn = aws_iam_policy.aws_load_balancer_controller.arn
-#   role       = aws_iam_role.aws_load_balancer_controller.name
-# }
+resource "aws_iam_role_policy_attachment" "aws_load_balancer_controller" {
+  policy_arn = aws_iam_policy.aws_load_balancer_controller.arn
+  role       = aws_iam_role.aws_load_balancer_controller.name
+}
 
 # Optional: More restrictive managed policy (if available)
 # resource "aws_iam_role_policy_attachment" "aws_load_balancer_controller_managed" {

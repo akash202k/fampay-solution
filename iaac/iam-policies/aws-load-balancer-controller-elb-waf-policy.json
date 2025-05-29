@@ -4,30 +4,6 @@
         {
             "Effect": "Allow",
             "Action": [
-                "ec2:DescribeVpcs",
-                "ec2:DescribeSubnets",
-                "ec2:DescribeSecurityGroups",
-                "ec2:DescribeInstances",
-                "ec2:DescribeNetworkInterfaces",
-                "ec2:DescribeTags",
-                "ec2:DescribeAvailabilityZones"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "ec2:CreateSecurityGroup",
-                "ec2:CreateTags",
-                "ec2:AuthorizeSecurityGroupIngress",
-                "ec2:RevokeSecurityGroupIngress",
-                "ec2:DeleteSecurityGroup"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
                 "elasticloadbalancing:CreateLoadBalancer",
                 "elasticloadbalancing:CreateTargetGroup",
                 "elasticloadbalancing:CreateListener",
@@ -45,6 +21,16 @@
                 "elasticloadbalancing:DescribeTargetHealth",
                 "elasticloadbalancing:AddTags",
                 "elasticloadbalancing:RemoveTags"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "wafv2:GetWebACL",
+                "wafv2:GetWebACLForResource",
+                "waf-regional:GetWebACL",
+                "waf-regional:GetWebACLForResource"
             ],
             "Resource": "*"
         }
