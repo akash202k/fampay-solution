@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: bran
+  name: bran
+  namespace: fampay-bran
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bran
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: bran
+    spec:
+      containers:
+      - name: bran
+        env:
+        envFrom:
+        - secretRef:
+            name: bran-secret
+        image: public.ecr.aws/q0k4e9h0/fampay-bran:v1.0.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+        resources:
+          limits:
+            cpu: 200m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 256Mi
+      restartPolicy: Always

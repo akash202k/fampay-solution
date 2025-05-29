@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hodr-dev
+  namespace: argocd
+  labels:
+    app: hodr
+    environment: dev
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/akash202k/fampay-solution  # Update this
+    path: deployments/helm-charts/hodr
+    targetRevision: HEAD
+    helm: {}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: fampay-dev
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

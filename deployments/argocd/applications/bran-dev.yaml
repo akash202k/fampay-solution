@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bran-dev
+  namespace: argocd
+  labels:
+    app: bran
+    environment: dev
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/akash202k/fampay-solution  # Update this
+    path: deployments/helm-charts/bran
+    targetRevision: HEAD
+    helm: {}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: fampay-dev
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    
+  # Health checks
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      jsonPointers:
+        - /spec/replicas

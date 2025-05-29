@@ -1,0 +1,51 @@
+replicaCount: 2
+image:
+  repository: public.ecr.aws/q0k4e9h0/fampay-hodr
+  tag: dev-latest
+  pullPolicy: Always
+
+namespace: fampay-dev # Consistent namespace
+
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 128Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 50
+
+# Health checks
+livenessProbe:
+  httpGet:
+    path: /hodr/
+    port: 8080
+  initialDelaySeconds: 30
+  periodSeconds: 15
+
+readinessProbe:
+  httpGet:
+    path: /hodr/
+    port: 8080
+  initialDelaySeconds: 15
+  periodSeconds: 10
+
+# Spot instance configuration
+nodeSelector:
+  node-type: spot
+
+tolerations:
+  - key: "node-type"
+    operator: "Equal"
+    value: "spot"
+    effect: "NoSchedule"
