@@ -1,19 +1,19 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: hodr-hpa
-  namespace: fampay-hodr
+  name: {{ .Values.app.name }}-hpa
+  namespace: {{ .Values.app.namespace }}
 spec:
-  maxReplicas: 2
+  maxReplicas: {{ .Values.hpa.maxReplicas }}
   metrics:
   - resource:
       name: cpu
       target:
-        averageUtilization: 50
+        averageUtilization: {{ .Values.hpa.targetCPUUtilizationPercentage }}
         type: Utilization
     type: Resource
-  minReplicas: 1
+  minReplicas: {{ .Values.hpa.minReplicas }}
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: hodr
+    name: {{ .Values.app.name }}
