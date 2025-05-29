@@ -70,7 +70,7 @@ module "eks" {
       min_size     = 1
 
       # Mix of instance types for better spot availability
-      instance_types = ["t3.small","t2.medium"]
+      instance_types = ["t3.small", "t2.medium"]
       capacity_type  = "SPOT"
       subnet_ids     = module.vpc.public_subnets
 
