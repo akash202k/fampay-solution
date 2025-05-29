@@ -19,15 +19,13 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: bran 
-                namespace: fampay-bran
+                name: bran-external 
                 port:
                   number: 8000
           - path: /hodr
             pathType: Prefix
             backend:
               service:
-                name: hodr
-                namespace: fampay-hodr
+                name: hodr-external
                 port:
                   number: 8080
