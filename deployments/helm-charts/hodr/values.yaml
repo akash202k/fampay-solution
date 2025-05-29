@@ -1,16 +1,25 @@
-replicaCount: 2
+# Application Configuration
+app:
+  name: hodr
+  namespace: fampay-hodr
+
+# Image Configuration
 image:
   repository: public.ecr.aws/q0k4e9h0/fampay-hodr
-  tag: dev-latest
-  pullPolicy: Always
+  tag: v1.0.1
+  pullPolicy: IfNotPresent
 
-namespace: fampay-hodr # Consistent namespace
-
+# Service Configuration
 service:
   type: ClusterIP
   port: 8080
   targetPort: 8080
 
+# Deployment Configuration
+deployment:
+  replicaCount: 1
+  
+# Resources
 resources:
   limits:
     cpu: 200m
@@ -19,33 +28,20 @@ resources:
     cpu: 50m
     memory: 128Mi
 
-autoscaling:
-  enabled: true
-  minReplicas: 2
-  maxReplicas: 10
+# HPA Configuration
+hpa:
+  minReplicas: 1
+  maxReplicas: 2
   targetCPUUtilizationPercentage: 50
 
-# Health checks
-livenessProbe:
-  httpGet:
-    path: /hodr/
-    port: 8080
-  initialDelaySeconds: 30
-  periodSeconds: 15
+# Ingress Configuration
+ingress:
+  host: dayxcode.com
+  certificateArn: 'arn:aws:acm:us-east-1:982534355700:certificate/f744adec-d79a-4af8-9476-c507f5a7fe9f'
+  loadBalancerName: fampay-alb
+  groupName: fampay-shared
 
-readinessProbe:
-  httpGet:
-    path: /hodr/
-    port: 8080
-  initialDelaySeconds: 15
-  periodSeconds: 10
-
-# Spot instance configuration
-nodeSelector:
-  node-type: spot
-
-tolerations:
-  - key: "node-type"
-    operator: "Equal"
-    value: "spot"
-    effect: "NoSchedule"
+# Health Check Configuration
+healthCheck:
+  path: /hodr/metrics
+  port: 8080
