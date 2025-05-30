@@ -65,7 +65,7 @@ prometheus:
         memory: 32Mi
 
 # Grafana configuration
-grafana:
+
   enabled: true
   
   # Admin credentials
@@ -150,6 +150,52 @@ grafana:
         revision: 1
         datasource: Prometheus
 
+# Quick fix: Add this to your grafana section
+grafana:
+  enabled: true
+  adminUser: admin
+  adminPassword: "admin123"
+  
+  persistence:
+    enabled: true
+    size: 10Gi
+    storageClassName: gp3-ebs
+    
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+  
+  service:
+    type: ClusterIP
+    port: 3000  # Use Grafana's default port
+  
+  # Disable probes temporarily
+  readinessProbe:
+    enabled: false
+  livenessProbe:
+    enabled: false
+    
+  # Simple Grafana config
+  grafana.ini:
+    server:
+      http_port: 3000
+    security:
+      admin_user: admin
+      admin_password: admin123
+      
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://observability-prometheus-server:80
+        access: proxy
+        isDefault: true
 # Global settings
 global:
   # Image pull policy
