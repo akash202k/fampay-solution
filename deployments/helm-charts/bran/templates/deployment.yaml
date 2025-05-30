@@ -25,7 +25,7 @@ spec:
         env:
         envFrom:
         - secretRef:
-            name: {{ .Values.secret.external.name}}
+            name: {{ .Values.secrets.external.name}}
         image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
