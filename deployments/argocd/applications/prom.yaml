@@ -1,25 +1,25 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: prometheus
-  namespace: argocd
-  labels:
-    app: prometheus
-    environment: monitoring
-spec:
-  project: default
-  source:
-    repoURL: https://github.com/akash202k/fampay-solution  # Update this
-    path: deployments/helm-charts/monitoring/prometheus
-    targetRevision: HEAD
-    helm: {}
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: monitoring
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: prometheus
+#   namespace: argocd
+#   labels:
+#     app: prometheus
+#     environment: monitoring
+# spec:
+#   project: default
+#   source:
+#     repoURL: https://github.com/akash202k/fampay-solution  # Update this
+#     path: deployments/helm-charts/monitoring/prometheus
+#     targetRevision: HEAD
+#     helm: {}
+#   destination:
+#     server: https://kubernetes.default.svc
+#     namespace: monitoring
   
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
+#   syncPolicy:
+#     automated:
+#       prune: true
+#       selfHeal: true
+#     syncOptions:
+#       - CreateNamespace=true
