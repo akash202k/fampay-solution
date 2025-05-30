@@ -50,9 +50,10 @@ module "eks" {
       instance_types = ["t2.medium"] # Slightly better than t2.small
       capacity_type  = "ON_DEMAND"
       subnet_ids     = module.vpc.public_subnets
-      # iam_role_additional_policies = {
-      #   AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
-      # }
+      iam_role_additional_policies = {
+        AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+        AmazonEC2FullAccess      = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
+      }
       labels = {
         node-type = "on-demand"
       }
@@ -80,9 +81,10 @@ module "eks" {
 
       # Spot-specific configuration
       spot_allocation_strategy = "diversified"
-      # iam_role_additional_policies = {
-      #   AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
-      # }
+      iam_role_additional_policies = {
+        AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+        AmazonEC2FullAccess      = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
+      }
 
       labels = {
         node-type = "spot"
