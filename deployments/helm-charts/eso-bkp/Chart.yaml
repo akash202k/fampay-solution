@@ -1,0 +1,11 @@
+apiVersion: v2
+name: eso
+description: A Helm chart to deploy External Secrets Operator (ESO)
+type: application
+version: 0.1.0
+appVersion: "v0.17.0"
+
+dependencies:
+  - name: external-secrets
+    version: 0.17.0
+    repository: https://charts.external-secrets.io
