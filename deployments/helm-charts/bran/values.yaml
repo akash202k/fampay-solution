@@ -57,7 +57,9 @@ database:
 
 # Secrets Configuration
 secrets:
-  secretKey: django-insecure-8j=hrs#^z0t%#1^89isbgqeddf2_zw!#zh45rz-=h&u%ze)o3e
-  allowedHosts: "*"
-  debug: "true"
-  timeZone: "UTC"
+  # secretKey: django-insecure-8j=hrs#^z0t%#1^89isbgqeddf2_zw!#zh45rz-=h&u%ze)o3e
+  # allowedHosts: "*"
+  # debug: "true"
+  # timeZone: "UTC"
+  external: 
+    name: external_secret_name

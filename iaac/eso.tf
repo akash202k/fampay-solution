@@ -83,10 +83,5 @@ resource "kubernetes_annotations" "eso_sa_annotations" {
   }
 }
 
-# EKS Access Entry for ESO (if needed for cluster access)
-resource "aws_eks_access_entry" "eso_access" {
-  cluster_name      = module.eks.cluster_name
-  principal_arn     = aws_iam_role.eso_role.arn
-  kubernetes_groups = ["system:authenticated"]
-  type             = "STANDARD"
-}
+# EKS Access Entry for ESO - REMOVED (not needed for ESO to work)
+# ESO only needs IRSA, not direct EKS cluster access
