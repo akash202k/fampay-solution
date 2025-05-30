@@ -62,4 +62,4 @@ secrets:
   # debug: "true"
   # timeZone: "UTC"
   external: 
-    name: external_secret_name
+    name: bran-external-secret
