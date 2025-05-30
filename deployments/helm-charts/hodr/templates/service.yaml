@@ -3,6 +3,11 @@ kind: Service
 metadata:
   name: {{ .Values.app.name }}
   namespace: {{ .Values.app.namespace }}
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"           # Your application port
+    prometheus.io/path: "/hodr/metrics"  # Your custom metrics path
+    prometheus.io/scheme: "http"
 spec:
   ports:
   - name: http
