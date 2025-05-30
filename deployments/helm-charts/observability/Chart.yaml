@@ -6,5 +6,5 @@ version: 0.1.0
 appVersion: "v2.45.0"
 dependencies:
   - name: kube-prometheus-stack
-    version: 55.5.0  # Downgrade from 61.3.2
+    version: 51.2.0  # Downgraded to avoid annotation size issues
     repository: https://prometheus-community.github.io/helm-charts
