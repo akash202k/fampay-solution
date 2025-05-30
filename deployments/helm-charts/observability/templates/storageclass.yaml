@@ -1,50 +1,50 @@
-# {{- if .Values.storageClass.enabled }}
+{{- if .Values.storageClass.enabled }}
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ .Values.storageClass.name }}
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "{{ .Values.storageClass.isDefault }}"
+provisioner: ebs.csi.aws.com
+parameters:
+  type: {{ .Values.storageClass.type }}
+  {{- if eq .Values.storageClass.type "gp3" }}
+  iops: "{{ .Values.storageClass.iops }}"
+  throughput: "{{ .Values.storageClass.throughput }}"
+  {{- end }}
+  encrypted: "{{ .Values.storageClass.encrypted }}"
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true
+reclaimPolicy: Delete
+{{- end }}
+
+
+# # ebs-storageclass.yaml
 # apiVersion: storage.k8s.io/v1
 # kind: StorageClass
 # metadata:
-#   name: {{ .Values.storageClass.name }}
+#   name: gp3-ebs
 #   annotations:
-#     storageclass.kubernetes.io/is-default-class: "{{ .Values.storageClass.isDefault }}"
+#     storageclass.kubernetes.io/is-default-class: "true"
 # provisioner: ebs.csi.aws.com
 # parameters:
-#   type: {{ .Values.storageClass.type }}
-#   {{- if eq .Values.storageClass.type "gp3" }}
-#   iops: "{{ .Values.storageClass.iops }}"
-#   throughput: "{{ .Values.storageClass.throughput }}"
-#   {{- end }}
-#   encrypted: "{{ .Values.storageClass.encrypted }}"
+#   type: gp3
+#   iops: "3000"
+#   throughput: "125"
+#   encrypted: "true"
 # volumeBindingMode: WaitForFirstConsumer
 # allowVolumeExpansion: true
 # reclaimPolicy: Delete
-# {{- end }}
-
-
-# ebs-storageclass.yaml
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: gp3-ebs
-  annotations:
-    storageclass.kubernetes.io/is-default-class: "true"
-provisioner: ebs.csi.aws.com
-parameters:
-  type: gp3
-  iops: "3000"
-  throughput: "125"
-  encrypted: "true"
-volumeBindingMode: WaitForFirstConsumer
-allowVolumeExpansion: true
-reclaimPolicy: Delete
----
-# Alternative GP2 storage class (if GP3 not available)
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: gp2-ebs
-provisioner: ebs.csi.aws.com
-parameters:
-  type: gp2
-  encrypted: "true"
-volumeBindingMode: WaitForFirstConsumer
-allowVolumeExpansion: true
-reclaimPolicy: Delete
+# ---
+# # Alternative GP2 storage class (if GP3 not available)
+# apiVersion: storage.k8s.io/v1
+# kind: StorageClass
+# metadata:
+#   name: gp2
+# provisioner: ebs.csi.aws.com
+# parameters:
+#   type: gp2
+#   encrypted: "true"
+# volumeBindingMode: WaitForFirstConsumer
+# allowVolumeExpansion: true
+# reclaimPolicy: Delete

@@ -205,7 +205,7 @@ global:
 # Storage Class Configuration
 storageClass:
   enabled: true
-  name: gp3-ebs
+  name: gp3
   type: gp3
   iops: 3000
   throughput: 125
