@@ -2,11 +2,11 @@
 resource "helm_release" "external_secrets" {
   name             = "external-secrets"
   repository       = "https://charts.external-secrets.io"
-  chart           = "external-secrets"
-  namespace       = "eso"
+  chart            = "external-secrets"
+  namespace        = "eso"
   create_namespace = true
-  version         = "0.17.0"
-  
+  version          = "0.17.0"
+
   set {
     name  = "installCRDs"
     value = "true"
@@ -17,7 +17,7 @@ resource "helm_release" "external_secrets" {
 resource "aws_iam_policy" "eso_policy" {
   name        = "ESO-SecretsManager-Policy"
   description = "Policy for External Secrets Operator to access AWS Secrets Manager"
-  
+
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -36,7 +36,7 @@ resource "aws_iam_policy" "eso_policy" {
 # IAM Role for ESO Service Account
 resource "aws_iam_role" "eso_role" {
   name = "ESO-ServiceAccount-Role"
-  
+
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -48,8 +48,8 @@ resource "aws_iam_role" "eso_role" {
         Action = "sts:AssumeRoleWithWebIdentity"
         Condition = {
           StringEquals = {
-            "${replace(data.aws_iam_openid_connect_provider.eks.url, "https://", "")}:sub": "system:serviceaccount:eso:external-secrets"
-            "${replace(data.aws_iam_openid_connect_provider.eks.url, "https://", "")}:aud": "sts.amazonaws.com"
+            "${replace(data.aws_iam_openid_connect_provider.eks.url, "https://", "")}:sub" : "system:serviceaccount:eso:external-secrets"
+            "${replace(data.aws_iam_openid_connect_provider.eks.url, "https://", "")}:aud" : "sts.amazonaws.com"
           }
         }
       }
@@ -71,7 +71,7 @@ data "aws_iam_openid_connect_provider" "eks" {
 # Annotate the default service account created by ESO
 resource "kubernetes_annotations" "eso_sa_annotations" {
   depends_on = [helm_release.external_secrets]
-  
+
   api_version = "v1"
   kind        = "ServiceAccount"
   metadata {

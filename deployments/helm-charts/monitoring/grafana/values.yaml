@@ -11,6 +11,9 @@ grafana:
     size: 10Gi
     accessModes:
       - ReadWriteOnce
+
+  prometheus: 
+    enabled: false
   
   # Resources
   resources:

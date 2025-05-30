@@ -1,7 +1,9 @@
+# values.yaml for Prometheus
 kube-prometheus-stack:
   # Prometheus configuration
   prometheus:
     prometheusSpec:
+      # Resource limits
       resources:
         requests:
           memory: "250M"
@@ -10,60 +12,30 @@ kube-prometheus-stack:
           memory: "600M"
           cpu: "200m"
       
+      # Storage configuration
       storageSpec:
         volumeClaimTemplate:
           spec:
-            storageClassName: "gp2"
+            storageClassName: "gp2"  # Change based on your storage class
             accessModes: ["ReadWriteOnce"]
             resources:
               requests:
                 storage: 5Gi
       
+      # Retention period
       retention: 30d
       retentionSize: 20GB
+      
+      # Service Monitor selectors
       serviceMonitorSelectorNilUsesHelmValues: false
       podMonitorSelectorNilUsesHelmValues: false
       ruleSelectorNilUsesHelmValues: false
   
-  # Enable Grafana within this chart
+  # Grafana configuration (if included in kube-prometheus-stack)
   grafana:
-    enabled: true  # ✅ Change this to true
+    enabled: false  # Set to false if deploying Grafana separately
     
-    # Grafana configuration
-    adminPassword: "admin123"
-    
-    persistence:
-      enabled: true
-      storageClassName: "gp2"
-      size: 10Gi
-      accessModes:
-        - ReadWriteOnce
-    
-    resources:
-      requests:
-        memory: "200Mi"
-        cpu: "100m"
-      limits:
-        memory: "500Mi"
-        cpu: "200m"
-    
-    # Pre-configured dashboards
-    dashboards:
-      default:
-        kubernetes-cluster-monitoring:
-          gnetId: 7249
-          revision: 1
-          datasource: Prometheus
-        kubernetes-pod-monitoring:
-          gnetId: 6417
-          revision: 1
-          datasource: Prometheus
-        node-exporter:
-          gnetId: 1860
-          revision: 37
-          datasource: Prometheus
-  
-  # AlertManager
+  # AlertManager configuration
   alertmanager:
     alertmanagerSpec:
       resources:
@@ -82,8 +54,10 @@ kube-prometheus-stack:
               requests:
                 storage: 5Gi
   
+  # Node Exporter
   nodeExporter:
     enabled: true
   
+  # Kube State Metrics
   kubeStateMetrics:
     enabled: true

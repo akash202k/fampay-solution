@@ -28,9 +28,11 @@ module "eks" {
       most_recent = true
     }
 
-    aws-ebs-csi-driver = {
-      most_recent = true
-    }
+   aws-ebs-csi-driver = {
+    most_recent = true
+    service_account_role_arn = aws_iam_role.ebs_csi_driver.arn
+    # Remove the configuration_values section completely
+  }
 
     # EKS Pod Identity Agent - For improved IRSA (OPTIONAL but recommended)
     eks-pod-identity-agent = {
@@ -42,13 +44,15 @@ module "eks" {
     # On-Demand node group (for critical workloads)
     on_demand = {
       name           = "on-demand-nodes"
-      desired_size   = 1
-      max_size       = 2
+      desired_size   = 3
+      max_size       = 5
       min_size       = 1
-      instance_types = ["t3.small"] # Slightly better than t2.small
+      instance_types = ["t2.medium"] # Slightly better than t2.small
       capacity_type  = "ON_DEMAND"
       subnet_ids     = module.vpc.public_subnets
-
+      # iam_role_additional_policies = {
+      #   AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+      # }
       labels = {
         node-type = "on-demand"
       }
@@ -76,6 +80,9 @@ module "eks" {
 
       # Spot-specific configuration
       spot_allocation_strategy = "diversified"
+      # iam_role_additional_policies = {
+      #   AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+      # }
 
       labels = {
         node-type = "spot"
