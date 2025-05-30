@@ -1,0 +1,97 @@
+# values.yaml for Grafana
+grafana:
+  # Admin credentials
+  adminUser: admin
+  adminPassword: "admin123"  # Change this or use secret
+  
+  # Persistence
+  persistence:
+    enabled: true
+    storageClassName: "gp2"  # Change based on your storage class
+    size: 10Gi
+    accessModes:
+      - ReadWriteOnce
+  
+  # Resources
+  resources:
+    requests:
+      memory: "200Mi"
+      cpu: "100m"
+    limits:
+      memory: "500Mi"
+      cpu: "200m"
+  
+  # Service configuration
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 3000
+  
+  # Ingress configuration (optional)
+  ingress:
+    enabled: false
+    # annotations:
+    #   kubernetes.io/ingress.class: nginx
+    #   cert-manager.io/cluster-issuer: letsencrypt-prod
+    # hosts:
+    #   - host: grafana.example.com
+    #     paths:
+    #       - path: /
+    #         pathType: Prefix
+    # tls:
+    #   - secretName: grafana-tls
+    #     hosts:
+    #       - grafana.example.com
+  
+  # Datasources configuration
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: Prometheus
+          type: prometheus
+          url: http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090
+          access: proxy
+          isDefault: true
+          editable: true
+  
+  # Dashboard providers
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+        - name: 'default'
+          orgId: 1
+          folder: ''
+          type: file
+          disableDeletion: false
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/default
+  
+  # Pre-configured dashboards
+  dashboards:
+    default:
+      kubernetes-cluster-monitoring:
+        gnetId: 7249
+        revision: 1
+        datasource: Prometheus
+      kubernetes-pod-monitoring:
+        gnetId: 6417
+        revision: 1
+        datasource: Prometheus
+      node-exporter:
+        gnetId: 1860
+        revision: 37
+        datasource: Prometheus
+  
+  # Security context
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 472
+    fsGroup: 472
+  
+  # Environment variables
+  env:
+    GF_SECURITY_ADMIN_PASSWORD: "admin123"  # Use secret in production
+    GF_USERS_ALLOW_SIGN_UP: "false"

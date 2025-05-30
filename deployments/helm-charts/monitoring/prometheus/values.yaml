@@ -1,0 +1,63 @@
+# values.yaml for Prometheus
+kube-prometheus-stack:
+  # Prometheus configuration
+  prometheus:
+    prometheusSpec:
+      # Resource limits
+      resources:
+        requests:
+          memory: "250M"
+          cpu: "100m"
+        limits:
+          memory: "600M"
+          cpu: "200m"
+      
+      # Storage configuration
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: "gp2"  # Change based on your storage class
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 5Gi
+      
+      # Retention period
+      retention: 30d
+      retentionSize: 20GB
+      
+      # Service Monitor selectors
+      serviceMonitorSelectorNilUsesHelmValues: false
+      podMonitorSelectorNilUsesHelmValues: false
+      ruleSelectorNilUsesHelmValues: false
+  
+  # Grafana configuration (if included in kube-prometheus-stack)
+  grafana:
+    enabled: false  # Set to false if deploying Grafana separately
+    
+  # AlertManager configuration
+  alertmanager:
+    alertmanagerSpec:
+      resources:
+        requests:
+          memory: "200Mi"
+          cpu: "100m"
+        limits:
+          memory: "500Mi"
+          cpu: "200m"
+      storage:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: "gp2"
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 5Gi
+  
+  # Node Exporter
+  nodeExporter:
+    enabled: true
+  
+  # Kube State Metrics
+  kubeStateMetrics:
+    enabled: true
