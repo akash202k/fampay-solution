@@ -50,7 +50,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "2"
 spec:
-  project: default  # Fixed: was 'observability' but that project may not exist
+  project: default  # Fixed: was 'observability' but that project may not exist/
   source:
     repoURL: https://github.com/akash202k/fampay-solution 
     path: deployments/helm-charts/observability/logging/opensearch
