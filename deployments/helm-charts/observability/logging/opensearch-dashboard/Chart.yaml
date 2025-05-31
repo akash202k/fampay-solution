@@ -9,3 +9,4 @@ dependencies:
   - name: opensearch-dashboards
     version: "3.0.0"
     repository: "https://opensearch-project.github.io/helm-charts/"
+
