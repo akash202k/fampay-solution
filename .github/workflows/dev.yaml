@@ -1,5 +1,4 @@
 name: Terraform v1.12.1 Deployment
-
 on:
   push:
     branches:
@@ -21,30 +20,42 @@ jobs:
           terraform_version: 1.12.1
 
       - name: Set up AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4 # Updated version
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Update kubeconfig
+      - name: Verify AWS Connection
+        run: |
+          aws sts get-caller-identity
+          aws eks describe-cluster --name fampay-eks-cluster --region us-east-1
+
+      - name: Update kubeconfig and set environment
         run: |
           aws eks update-kubeconfig --region us-east-1 --name fampay-eks-cluster
+          export KUBECONFIG=~/.kube/config
+          echo "KUBECONFIG=~/.kube/config" >> $GITHUB_ENV
+          kubectl cluster-info
 
       - name: Terraform Init
         run: terraform init
         working-directory: ./iaac
+        env:
+          KUBECONFIG: ~/.kube/config
 
       - name: Terraform Plan
-        run: terraform plan #-out=tfplan
+        run: terraform plan
         working-directory: ./iaac
+        env:
+          KUBECONFIG: ~/.kube/config
 
   apply:
     name: Terraform Apply (Manual Approval)
     needs: terraform
     runs-on: ubuntu-latest
     environment:
-      name: prod # Manual approval trigger in GitHub → Environments
+      name: prod
 
     steps:
       - name: Checkout Code
@@ -56,21 +67,27 @@ jobs:
           terraform_version: 1.12.1
 
       - name: Set up AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Update kubeconfig
+      - name: Update kubeconfig and set environment
         run: |
           aws eks update-kubeconfig --region us-east-1 --name fampay-eks-cluster
+          export KUBECONFIG=~/.kube/config
+          echo "KUBECONFIG=~/.kube/config" >> $GITHUB_ENV
+          kubectl cluster-info
+
       - name: Terraform Init
         run: terraform init
         working-directory: ./iaac
+        env:
+          KUBECONFIG: ~/.kube/config
 
       - name: Terraform Apply
-        run: echo "running terraform apply command"
+        run: echo "runing terraform aply test "
         working-directory: ./iaac
-
-        # terraform apply -auto-approve tfplan
+        env:
+          KUBECONFIG: ~/.kube/config

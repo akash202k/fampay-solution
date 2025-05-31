@@ -17,7 +17,7 @@ provider "kubernetes" {
       "eks", "get-token",
       "--cluster-name", module.eks.cluster_name,
       "--region", var.aws_region,
-      "--profile", "fampay"
+      # "--profile", "fampay"
     ]
   }
 }
@@ -35,7 +35,7 @@ provider "helm" {
         "eks", "get-token",
         "--cluster-name", module.eks.cluster_name,
         "--region", var.aws_region,
-        "--profile", "fampay"
+        # "--profile", "fampay"
       ]
     }
   }
