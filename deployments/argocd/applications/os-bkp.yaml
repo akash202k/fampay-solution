@@ -6,6 +6,8 @@
 #   labels:
 #     app: opensearch
 #     environment: logging
+#   annotations:
+#     argocd.argoproj.io/sync-wave: "2"
 # spec:
 #   project: default  # Fixed: was 'observability' but that project may not exist/
 #   source:
@@ -23,3 +25,15 @@
 #     automated:
 #       prune: true
 #       selfHeal: true
+#       allowEmpty: false
+#     syncOptions:
+#       - CreateNamespace=true
+#       - PrunePropagationPolicy=foreground
+#       - PruneLast=true
+#     retry:
+#       limit: 5
+#       backoff:
+#         duration: 5s
+#         factor: 2
+#         maxDuration: 3m
+#   revisionHistoryLimit: 10
