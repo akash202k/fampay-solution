@@ -1,39 +1,39 @@
-# test-opensearch.yaml
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: opensearch
-  namespace: argocd
-spec:
-  project: default
-  source:
-    repoURL: https://opensearch-project.github.io/helm-charts/
-    chart: opensearch
-    targetRevision: 3.0.0
-    helm:
-      values: |
-        replicas: 1
-        singleNode: true
-        persistence:
-          enabled: true
-          size: 10Gi
-          storageClass: gp3
-        extraEnvs:
-          - name: OPENSEARCH_INITIAL_ADMIN_PASSWORD
-            value: "MyStrongPassword123!"
-        resources:
-          requests:
-            cpu: "500m"
-            memory: "1Gi"
-          limits:
-            cpu: "1000m"
-            memory: "2Gi"
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: opensearch
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
+# # test-opensearch.yaml
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: opensearch
+#   namespace: argocd
+# spec:
+#   project: default
+#   source:
+#     repoURL: https://opensearch-project.github.io/helm-charts/
+#     chart: opensearch
+#     targetRevision: 3.0.0
+#     helm:
+#       values: |
+#         replicas: 1
+#         singleNode: true
+#         persistence:
+#           enabled: true
+#           size: 10Gi
+#           storageClass: gp3
+#         extraEnvs:
+#           - name: OPENSEARCH_INITIAL_ADMIN_PASSWORD
+#             value: "MyStrongPassword123!"
+#         resources:
+#           requests:
+#             cpu: "500m"
+#             memory: "1Gi"
+#           limits:
+#             cpu: "1000m"
+#             memory: "2Gi"
+#   destination:
+#     server: https://kubernetes.default.svc
+#     namespace: opensearch
+#   syncPolicy:
+#     automated:
+#       prune: true
+#       selfHeal: true
+#     syncOptions:
+#       - CreateNamespace=true
