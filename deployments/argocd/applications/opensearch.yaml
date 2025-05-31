@@ -1,25 +1,67 @@
-# apiVersion: argoproj.io/v1alpha1
-# kind: Application
-# metadata:
-#   name: opensearch
-#   namespace: argocd
-#   labels:
-#     app: opensearch
-#     environment: logging
-# spec:
-#   project: default  # Fixed: was 'observability' but that project may not exist/
-#   source:
-#     repoURL: https://github.com/akash202k/fampay-solution 
-#     path: deployments/helm-charts/observability/logging/os
-#     targetRevision: HEAD
-#     helm:
-#       releaseName: opensearch
-#       valueFiles:
-#         - values.yaml
-#   destination:
-#     server: https://kubernetes.default.svc
-#     namespace: opensearch  # Fixed: OpenSearch should be in 'opensearch' namespace
-#   syncPolicy:
-#     automated:
-#       prune: true
-#       selfHeal: true
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: opensearch
+  namespace: argocd
+  labels:
+    app: opensearch
+    environment: logging
+spec:
+  project: default  # Fixed: was 'observability' but that project may not exist/
+  source:
+    repoURL: https://github.com/akash202k/fampay-solution 
+    path: deployments/helm-charts/observability/logging/os
+    targetRevision: HEAD
+    helm:
+      releaseName: opensearch
+      valueFiles:
+        - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: opensearch  # Fixed: OpenSearch should be in 'opensearch' namespace
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: opensearch-dashboard
+  namespace: argocd
+  labels:
+    app: opensearch-dashboard
+    environment: logging
+  # annotations:
+  #   argocd.argoproj.io/sync-wave: "3"  # Deploy after OpenSearch
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/akash202k/fampay-solution  
+    path: deployments/helm-charts/observability/logging/opensearch-dashboard
+    targetRevision: HEAD
+    helm:
+      releaseName: opensearch-dashboard
+      valueFiles:
+        - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: opensearch  # Fixed: Dashboard should be in same namespace as OpenSearch
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  #     allowEmpty: false
+  #   syncOptions:
+  #     - CreateNamespace=true
+  #     - PrunePropagationPolicy=foreground
+  #     - PruneLast=true
+  #   retry:
+  #     limit: 5
+  #     backoff:
+  #       duration: 5s
+  #       factor: 2
+  #       maxDuration: 3m
+  # revisionHistoryLimit: 10
