@@ -1,8 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: argocd-ingress
-  namespace: argocd
+  name: prometheus-ingress
+  namespace: observability
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
@@ -33,13 +33,13 @@ metadata:
 
 spec:
   rules:
-    - host: argocd.dayxcode.com
+    - host: prometheus.dayxcode.com
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: argocd-server
+                name: monitoring-prometheus-server
                 port:
                   number: 80
