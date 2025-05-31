@@ -6,16 +6,25 @@ persistence:
   size: 10Gi
   storageClass: gp3
 
+# extraEnvs:
+#   - name: OPENSEARCH_INITIAL_ADMIN_PASSWORD
+#     valueFrom:
+#       secretRef:
+#         name: opensearch-admin-password
+#         key: OPENSEARCH_INITIAL_ADMIN_PASSWORD
+#   - name: DISABLE_INSTALL_DEMO_CONFIG
+#     value: "true"
+  # - name: DISABLE_SECURITY_PLUGIN
+  #   value: "false"
+
+# securityConfig:
+#   enabled: false
+
 extraEnvs:
-  - name: OPENSEARCH_INITIAL_ADMIN_PASSWORD
-    valueFrom:
-      secretRef:
-        name: opensearch-admin-password
-        key: OPENSEARCH_INITIAL_ADMIN_PASSWORD
   - name: DISABLE_INSTALL_DEMO_CONFIG
-    value: "false"
-  - name: DISABLE_SECURITY_PLUGIN
-    value: "false"
+    value: "true"
+  - name: OPENSEARCH_INITIAL_ADMIN_PASSWORD
+    value: "MyStrongPassword123!"
 
 resources:
   requests:
