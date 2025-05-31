@@ -4,7 +4,7 @@ singleNode: true
 persistence:
   enabled: true
   size: 10Gi
-  storageClass: gp2
+  storageClass: gp3
 
 extraEnvs:
   - name: OPENSEARCH_INITIAL_ADMIN_PASSWORD
