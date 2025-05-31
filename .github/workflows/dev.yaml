@@ -32,7 +32,7 @@ jobs:
         working-directory: ./iaac
 
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        run: terraform plan #-out=tfplan
         working-directory: ./iaac
 
   apply:
