@@ -2,7 +2,7 @@
 # AWS Provider
 provider "aws" {
   region  = var.aws_region # This will be us-east-1
-  profile = "fampay"
+  # profile = "fampay"
 }
 
 
