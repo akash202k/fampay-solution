@@ -116,7 +116,7 @@ prometheus:
       datasources:
       - name: Prometheus
         type: prometheus
-        url: http://observability-prometheus-server:80
+        url: http://monitoring-prometheus-server:80
         access: proxy
         isDefault: true
         
