@@ -1,150 +1,150 @@
-# apiVersion: argoproj.io/v1alpha1
-# kind: Application
-# metadata:
-#   name: fluent-bit
-#   namespace: argocd
-#   labels:
-#     app: fluent-bit
-#     environment: logging
-#   annotations:
-#     argocd.argoproj.io/sync-wave: "3"  # Deploy after OpenSearch and Dashboard
-# spec:
-#   project: default
-#   source:
-#     repoURL: https://fluent.github.io/helm-charts
-#     chart: fluent-bit
-#     targetRevision: 0.49.0
-#     helm:
-#       releaseName: fluent-bit
-#       values: |
-#         image:
-#           repository: fluent/fluent-bit
-#           tag: "2.2.0"
-#         serviceAccount:
-#           create: true
-#         rbac:
-#           create: true
-#           nodeAccess: true
-#         resources:
-#           limits:
-#             cpu: 200m
-#             memory: 256Mi
-#           requests:
-#             cpu: 100m
-#             memory: 128Mi
-#         tolerations:
-#           - key: node-role.kubernetes.io/control-plane
-#             operator: Exists
-#             effect: NoSchedule
-#           - key: node-role.kubernetes.io/master
-#             operator: Exists
-#             effect: NoSchedule
-#         config:
-#           service: |
-#             [SERVICE]
-#                 Daemon Off
-#                 Flush 5
-#                 Log_Level info
-#                 Parsers_File parsers.conf
-#                 HTTP_Server On
-#                 HTTP_Listen 0.0.0.0
-#                 HTTP_Port 2020
-#                 Health_Check On
-#           inputs: |
-#             [INPUT]
-#                 Name tail
-#                 Path /var/log/containers/*.log
-#                 multiline.parser docker, cri
-#                 Tag kube.*
-#                 Mem_Buf_Limit 50MB
-#                 Skip_Long_Lines On
-#                 Refresh_Interval 10
-#           filters: |
-#             [FILTER]
-#                 Name kubernetes
-#                 Match kube.*
-#                 Kube_URL https://kubernetes.default.svc:443
-#                 Kube_CA_File /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-#                 Kube_Token_File /var/run/secrets/kubernetes.io/serviceaccount/token
-#                 Kube_Tag_Prefix kube.var.log.containers.
-#                 Merge_Log On
-#                 Merge_Log_Key log_processed
-#                 K8S-Logging.Parser On
-#                 K8S-Logging.Exclude Off
-#                 Annotations Off
-#                 Labels On
-#             [FILTER]
-#                 Name nest
-#                 Match kube.*
-#                 Operation lift
-#                 Nested_under kubernetes
-#                 Add_prefix kubernetes_
-#             [FILTER]
-#                 Name modify
-#                 Match kube.*
-#                 Remove kubernetes_pod_id
-#                 Remove kubernetes_docker_id
-#                 Remove kubernetes_container_hash
-#             [FILTER]
-#                 Name grep
-#                 Match kube.*
-#                 Exclude kubernetes_namespace_name kube-system
-#                 Exclude kubernetes_namespace_name kube-public
-#                 Exclude kubernetes_namespace_name kube-node-lease
-#                 Exclude kubernetes_namespace_name logging
-#           outputs: |
-#             [OUTPUT]
-#                 Name opensearch
-#                 Match kube.*
-#                 Host opensearch-cluster-master.opensearch.svc.cluster.local
-#                 Port 9200
-#                 Index application-logs
-#                 Type _doc
-#                 HTTP_User admin
-#                 HTTP_Passwd MyStrongPassword123!
-#                 tls On
-#                 tls.verify Off
-#                 Suppress_Type_Name On
-#                 Replace_Dots On
-#                 Retry_Limit 3
-#                 Generate_ID On
-#         daemonSetVolumes:
-#           - name: varlog
-#             hostPath:
-#               path: /var/log
-#           - name: varlibdockercontainers
-#             hostPath:
-#               path: /var/lib/docker/containers
-#           - name: etcmachineid
-#             hostPath:
-#               path: /etc/machine-id
-#               type: File
-#         daemonSetVolumeMounts:
-#           - name: varlog
-#             mountPath: /var/log
-#             readOnly: true
-#           - name: varlibdockercontainers
-#             mountPath: /var/lib/docker/containers
-#             readOnly: true
-#           - name: etcmachineid
-#             mountPath: /etc/machine-id
-#             readOnly: true
-#   destination:
-#     server: https://kubernetes.default.svc
-#     namespace: logging  # Fluent Bit in separate 'logging' namespace
-#   syncPolicy:
-#     automated:
-#       prune: true
-#       selfHeal: true
-#       allowEmpty: false
-#     syncOptions:
-#       - CreateNamespace=true
-#       - PrunePropagationPolicy=foreground
-#       - PruneLast=true
-#     retry:
-#       limit: 5
-#       backoff:
-#         duration: 5s
-#         factor: 2
-#         maxDuration: 3m
-#   revisionHistoryLimit: 10
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: fluent-bit
+  namespace: argocd
+  labels:
+    app: fluent-bit
+    environment: logging
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"  # Deploy after OpenSearch and Dashboard
+spec:
+  project: default
+  source:
+    repoURL: https://fluent.github.io/helm-charts
+    chart: fluent-bit
+    targetRevision: 0.49.0
+    helm:
+      releaseName: fluent-bit
+      values: |
+        image:
+          repository: fluent/fluent-bit
+          tag: "2.2.0"
+        serviceAccount:
+          create: true
+        rbac:
+          create: true
+          nodeAccess: true
+        resources:
+          limits:
+            cpu: 200m
+            memory: 256Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        tolerations:
+          - key: node-role.kubernetes.io/control-plane
+            operator: Exists
+            effect: NoSchedule
+          - key: node-role.kubernetes.io/master
+            operator: Exists
+            effect: NoSchedule
+        config:
+          service: |
+            [SERVICE]
+                Daemon Off
+                Flush 5
+                Log_Level info
+                Parsers_File parsers.conf
+                HTTP_Server On
+                HTTP_Listen 0.0.0.0
+                HTTP_Port 2020
+                Health_Check On
+          inputs: |
+            [INPUT]
+                Name tail
+                Path /var/log/containers/*.log
+                multiline.parser docker, cri
+                Tag kube.*
+                Mem_Buf_Limit 50MB
+                Skip_Long_Lines On
+                Refresh_Interval 10
+          filters: |
+            [FILTER]
+                Name kubernetes
+                Match kube.*
+                Kube_URL https://kubernetes.default.svc:443
+                Kube_CA_File /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+                Kube_Token_File /var/run/secrets/kubernetes.io/serviceaccount/token
+                Kube_Tag_Prefix kube.var.log.containers.
+                Merge_Log On
+                Merge_Log_Key log_processed
+                K8S-Logging.Parser On
+                K8S-Logging.Exclude Off
+                Annotations Off
+                Labels On
+            [FILTER]
+                Name nest
+                Match kube.*
+                Operation lift
+                Nested_under kubernetes
+                Add_prefix kubernetes_
+            [FILTER]
+                Name modify
+                Match kube.*
+                Remove kubernetes_pod_id
+                Remove kubernetes_docker_id
+                Remove kubernetes_container_hash
+            [FILTER]
+                Name grep
+                Match kube.*
+                Exclude kubernetes_namespace_name kube-system
+                Exclude kubernetes_namespace_name kube-public
+                Exclude kubernetes_namespace_name kube-node-lease
+                Exclude kubernetes_namespace_name logging
+          outputs: |
+            [OUTPUT]
+                Name opensearch
+                Match kube.*
+                Host opensearch-cluster-master.opensearch.svc.cluster.local
+                Port 9200
+                Index application-logs
+                Type _doc
+                HTTP_User admin
+                HTTP_Passwd MyStrongPassword123!
+                tls On
+                tls.verify Off
+                Suppress_Type_Name On
+                Replace_Dots On
+                Retry_Limit 3
+                Generate_ID On
+        daemonSetVolumes:
+          - name: varlog
+            hostPath:
+              path: /var/log
+          - name: varlibdockercontainers
+            hostPath:
+              path: /var/lib/docker/containers
+          - name: etcmachineid
+            hostPath:
+              path: /etc/machine-id
+              type: File
+        daemonSetVolumeMounts:
+          - name: varlog
+            mountPath: /var/log
+            readOnly: true
+          - name: varlibdockercontainers
+            mountPath: /var/lib/docker/containers
+            readOnly: true
+          - name: etcmachineid
+            mountPath: /etc/machine-id
+            readOnly: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: logging  # Fluent Bit in separate 'logging' namespace
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+  revisionHistoryLimit: 10
