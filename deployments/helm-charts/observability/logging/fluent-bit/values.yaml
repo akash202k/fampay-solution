@@ -93,7 +93,7 @@ config:
         Index application-logs
         Type _doc
         HTTP_User admin
-        HTTP_Passwd fdfvB-R2%07k
+        HTTP_Passwd Admin123!
         tls On
         tls.verify Off
         Suppress_Type_Name On

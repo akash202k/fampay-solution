@@ -8,7 +8,7 @@ persistence:
 
 extraEnvs:
   - name: OPENSEARCH_INITIAL_ADMIN_PASSWORD
-    value: "fdfvB-R2%07k"
+    value: "Admin123!"
 
 resources:
   requests:
