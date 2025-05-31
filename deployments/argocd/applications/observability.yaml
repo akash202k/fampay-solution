@@ -1,16 +1,103 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: observability
+  name: monitoring
   namespace: argocd
   labels:
-    app: observability
-    environment: observability
+    app: monitoring
+    environment: monitoring
 spec:
   project: default
   source:
-    repoURL: https://github.com/akash202k/fampay-solution  # Update this
-    path: deployments/helm-charts/observability
+    repoURL: https://github.com/akash202k/fampay-solution  
+    path: deployments/helm-charts/observability/monitoring
+    targetRevision: HEAD
+    helm: {}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: observability
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: logging/fluent-bit
+  namespace: argocd
+  labels:
+    app: logging/fluent-bit
+    environment: logging
+spec:
+  project: observability
+  source:
+    repoURL: https://github.com/akash202k/fampay-solution  
+    path: deployments/helm-charts/observability/logging/fluent-bit
+    targetRevision: HEAD
+    helm: {}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: observability
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: logging/opensearch
+  namespace: argocd
+  labels:
+    app: logging/opensearch
+    environment: logging
+spec:
+  project: observability
+  source:
+    repoURL: https://github.com/akash202k/fampay-solution 
+    path: deployments/helm-charts/observability/logging/opensearch
+    targetRevision: HEAD
+    helm: {}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: observability
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: logging/opensearch-dashboard
+  namespace: argocd
+  labels:
+    app: logging/opensearch-dashboard
+    environment: logging
+spec:
+  project: observability
+  source:
+    repoURL: https://github.com/akash202k/fampay-solution  
+    path: deployments/helm-charts/observability/logging/opensearch-dashboard
     targetRevision: HEAD
     helm: {}
   destination:

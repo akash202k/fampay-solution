@@ -1,0 +1,11 @@
+apiVersion: v2
+name: opensearch
+description: OpenSearch search and analytics engine
+type: application
+version: 1.0.0
+appVersion: "3.0.0"
+
+dependencies:
+  - name: opensearch
+    version: "3.0.0"
+    repository: "https://opensearch-project.github.io/helm-charts/"

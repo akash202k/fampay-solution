@@ -1,0 +1,19 @@
+replicas: 1
+singleNode: true
+
+persistence:
+  enabled: true
+  size: 10Gi
+  storageClass: gp2
+
+extraEnvs:
+  - name: OPENSEARCH_INITIAL_ADMIN_PASSWORD
+    value: "fdfvB-R2%07k"
+
+resources:
+  requests:
+    cpu: "500m"
+    memory: "1Gi"
+  limits:
+    cpu: "1000m"
+    memory: "2Gi"

@@ -211,3 +211,22 @@ storageClass:
   throughput: 125
   encrypted: true
   isDefault: true
+
+
+ingress:
+  certificateArn: 'arn:aws:acm:us-east-1:982534355700:certificate/f744adec-d79a-4af8-9476-c507f5a7fe9f'
+  loadBalancerName: fampay-alb
+  groupName: fampay-shared
+  namespace: observability
+  
+
+  prometheus:
+    app: prometheus
+    host: prometheus.dayxcode.com
+    healthCheck: 
+      path: 
+
+  grafana: 
+    app: grafana
+    host: grafana.dayxcode.com
+    

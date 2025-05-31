@@ -1,0 +1,42 @@
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: prometheus-ingress
+#   namespace: {{ .Values.ingress.namespace }}
+#   annotations:
+#     # Core ALB Settings
+#     kubernetes.io/ingress.class: alb
+#     alb.ingress.kubernetes.io/scheme: internet-facing
+#     alb.ingress.kubernetes.io/target-type: ip
+    
+#     # Load Balancer Naming (optional but recommended)
+#     alb.ingress.kubernetes.io/load-balancer-name: {{ .Values.ingress.loadBalancerName }}
+#     alb.ingress.kubernetes.io/group.name: {{ .Values.ingress.groupName }}
+    
+#     # SSL/HTTPS Configuration
+#     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+#     alb.ingress.kubernetes.io/certificate-arn: {{ .Values.ingress.certificateArn }}
+#     alb.ingress.kubernetes.io/ssl-redirect: '443'
+    
+#     # Health Check Settings
+#     alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+#     alb.ingress.kubernetes.io/healthcheck-path: {{ .Values.ingress.prometheus.healthCheck.path }}
+#     alb.ingress.kubernetes.io/healthcheck-port: '{{ .Values.healthCheck.port }}'
+#     alb.ingress.kubernetes.io/healthcheck-interval-seconds: '15'
+#     alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '5'
+#     alb.ingress.kubernetes.io/success-codes: '200'
+#     alb.ingress.kubernetes.io/healthy-threshold-count: '2'
+#     alb.ingress.kubernetes.io/unhealthy-threshold-count: '2'
+
+# spec:
+#   rules:
+#     - host: {{ .Values.ingress.host }}
+#       http:
+#         paths:
+#           - path: /{{ .Values.app.name }}
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: {{ .Values.app.name }}
+#                 port:
+#                   number: {{ .Values.service.port }}
