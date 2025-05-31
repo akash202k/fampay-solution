@@ -44,8 +44,8 @@ module "eks" {
     # On-Demand node group (for critical workloads)
     on_demand = {
       name           = "on-demand-nodes"
-      desired_size   = 3
-      max_size       = 5
+      desired_size   = 1
+      max_size       = 2
       min_size       = 1
       instance_types = ["t2.medium"] # Slightly better than t2.small
       capacity_type  = "ON_DEMAND"
@@ -70,8 +70,8 @@ module "eks" {
     # Spot instance node group (for cost savings)
     spot = {
       name         = "spot-nodes"
-      desired_size = 2
-      max_size     = 3
+      desired_size = 4
+      max_size     = 7
       min_size     = 1
 
       # Mix of instance types for better spot availability
