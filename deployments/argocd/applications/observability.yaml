@@ -96,7 +96,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/akash202k/fampay-solution  
-    path: deployments/helm-charts/observability/logging/fluent-bit
+    path: deployments/helm-charts/observability/logging/fb
     targetRevision: HEAD
     helm:
       releaseName: fluent-bit

@@ -7,6 +7,6 @@ appVersion: "3.0.0"
 
 dependencies:
   - name: opensearch
-    version: "3.0.0"
+    version: "2.34.0"
     repository: "https://opensearch-project.github.io/helm-charts/" 
     # 
