@@ -4,22 +4,11 @@ singleNode: true
 persistence:
   enabled: true
   size: 10Gi
-  storageClass: gp3
-
-# extraEnvs:
-#   - name: OPENSEARCH_INITIAL_ADMIN_PASSWORD
-#     value: "MyStrongPassword123!"
-
-# envFrom:
-#   - secretRef:
-#       name: opensearch-admin-password
+  storageClass: gp2
 
 extraEnvs:
   - name: OPENSEARCH_INITIAL_ADMIN_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: opensearch-admin-password
-        key: OPENSEARCH_INITIAL_ADMIN_PASSWORD
+    value: "MyStrongPassword123!"
 
 resources:
   requests:
