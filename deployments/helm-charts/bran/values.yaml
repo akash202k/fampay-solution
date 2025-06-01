@@ -71,4 +71,4 @@ networkPolicy:
   enabled: true
   allowALB: true                       # Allow ALB/external traffic
   allowPrometheus: true                # Allow Prometheus monitoring
-  prometheusNamespace: "monitoring"    # Prometheus namespace
+  prometheusNamespace: "observability"    # Prometheus namespace
