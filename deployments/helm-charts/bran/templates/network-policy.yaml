@@ -10,14 +10,8 @@ spec:
       app: {{ .Values.app.name }}
   policyTypes:
   - Ingress
-  # NO Egress restrictions - by default all egress allowed
   
   ingress:
-  # Allow external traffic (ALB/LoadBalancer)
-  - ports:
-    - protocol: TCP
-      port: {{ .Values.service.targetPort }}
-  
   {{- if .Values.networkPolicy.allowPrometheus }}
   # Allow Prometheus monitoring
   - from:
@@ -29,5 +23,6 @@ spec:
       port: {{ .Values.service.targetPort }}
   {{- end }}
   
-  # NO rule for Hodr = Hodr BLOCKED from connecting to Bran
+  # REMOVED permissive ALB rule - let's see if external access still works
+  # NO OTHER RULES = Block Hodr
 {{- end }}
