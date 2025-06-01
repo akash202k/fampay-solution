@@ -46,21 +46,3 @@ healthCheck:
   path: /hodr/metrics
   port: 8080
 
-
-# Network Policy Configuration
-networkPolicy:
-  enabled: true
-  
-  # What can connect TO hodr
-  allowIngress:
-    fromALB: true                    # Allow ALB to reach hodr
-    fromBran: true                   # Allow Bran to connect to Hodr
-    fromPrometheus: true             # Allow Prometheus scraping
-    branNamespace: "fampay-bran"     # Bran's namespace
-    prometheusNamespace: "monitoring"
-  
-  # What hodr can connect TO
-  # NOTE: No connection back to Bran allowed
-  allowEgress:
-    toDNS: true                      # Allow DNS resolution
-    toExternal: true                 # Allow external API calls
