@@ -13,12 +13,11 @@ spec:
   
   ingress:
   {{- if .Values.networkPolicy.allowALB }}
-  # Allow ALB/External traffic (unfortunately needs to be permissive for ALB)
+  # Allow ALB/External traffic from kube-system (ALB controller namespace)
   - from:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: "kube-system"  # ALB controller namespace
-  - from: []  # Allow external load balancer IPs (ALB requirement)
+          kubernetes.io/metadata.name: "kube-system"
     ports:
     - protocol: TCP
       port: {{ .Values.service.targetPort }}
@@ -35,5 +34,5 @@ spec:
       port: {{ .Values.service.targetPort }}
   {{- end }}
   
-  # NO rule for Hodr = Hodr BLOCKED from connecting to Bran
+  # NO permissive rules - Hodr should be blocked now
 {{- end }}
