@@ -1,0 +1,46 @@
+{{- if .Values.networkPolicy.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Values.app.name }}-network-policy
+  namespace: {{ .Values.app.namespace }}
+spec:
+  podSelector:
+    matchLabels:
+      app: {{ .Values.app.name }}
+  policyTypes:
+  - Egress
+  # NO Ingress policy = allow all incoming traffic
+  
+  egress:
+  {{- if .Values.networkPolicy.allowEgress.toDNS }}
+  # Allow DNS resolution
+  - to: []
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+  {{- end }}
+
+  {{- if .Values.networkPolicy.allowEgress.toExternal }}
+  # Allow external API calls
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 80
+  {{- end }}
+
+  {{- if .Values.networkPolicy.allowEgress.toMonitoring }}
+  # Allow connection to monitoring/prometheus
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: "monitoring"
+  {{- end }}
+
+  # NO RULE for fampay-bran namespace = BLOCKED!
+  # Hodr cannot connect to Bran pods
+{{- end }}

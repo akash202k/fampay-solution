@@ -46,3 +46,14 @@ healthCheck:
   path: /hodr/metrics
   port: 8080
 
+
+# Network Policy Configuration
+networkPolicy:
+  enabled: true
+  
+  # What hodr can connect TO (RESTRICTIVE egress)
+  allowEgress:
+    toDNS: true                      # Allow DNS resolution
+    toExternal: true                 # Allow external API calls
+    toMonitoring: false              # Block monitoring if not needed
+    # toBran: false                  # EXPLICITLY NOT ALLOWED (omitted = blocked)

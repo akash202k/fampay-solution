@@ -10,29 +10,22 @@ spec:
       app: {{ .Values.app.name }}
   policyTypes:
   - Ingress
+  # NO Egress restrictions = allow all outgoing
   
   ingress:
-  {{- if .Values.networkPolicy.allowALB }}
-  # Allow ALB/External traffic from kube-system (ALB controller namespace)
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: "kube-system"
-    ports:
+  # Allow ALL incoming traffic (ALB requirement)
+  - ports:
     - protocol: TCP
       port: {{ .Values.service.targetPort }}
-  {{- end }}
   
   {{- if .Values.networkPolicy.allowPrometheus }}
-  # Allow Prometheus monitoring
+  # Allow Prometheus monitoring (redundant but explicit)
   - from:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: {{ .Values.networkPolicy.prometheusNamespace | default "monitoring" }}
+          kubernetes.io/metadata.name: {{ .Values.networkPolicy.prometheusNamespace | default "observability" }}
     ports:
     - protocol: TCP
       port: {{ .Values.service.targetPort }}
   {{- end }}
-  
-  # NO permissive rules - Hodr should be blocked now
 {{- end }}
