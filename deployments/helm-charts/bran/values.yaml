@@ -69,4 +69,6 @@ secrets:
 # Network Policy Configuration
 networkPolicy:
   enabled: true
-  allowPrometheus: true
+  allowALB: true                       # Allow ALB/external traffic
+  allowPrometheus: true                # Allow Prometheus monitoring
+  prometheusNamespace: "monitoring"    # Prometheus namespace

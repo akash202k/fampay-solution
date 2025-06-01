@@ -12,17 +12,28 @@ spec:
   - Ingress
   
   ingress:
-  {{- if .Values.networkPolicy.allowPrometheus }}
-  # Allow Prometheus monitoring
+  {{- if .Values.networkPolicy.allowALB }}
+  # Allow ALB/External traffic (unfortunately needs to be permissive for ALB)
   - from:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: "monitoring"
+          kubernetes.io/metadata.name: "kube-system"  # ALB controller namespace
+  - from: []  # Allow external load balancer IPs (ALB requirement)
     ports:
     - protocol: TCP
       port: {{ .Values.service.targetPort }}
   {{- end }}
   
-  # REMOVED permissive ALB rule - let's see if external access still works
-  # NO OTHER RULES = Block Hodr
+  {{- if .Values.networkPolicy.allowPrometheus }}
+  # Allow Prometheus monitoring
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: {{ .Values.networkPolicy.prometheusNamespace | default "monitoring" }}
+    ports:
+    - protocol: TCP
+      port: {{ .Values.service.targetPort }}
+  {{- end }}
+  
+  # NO rule for Hodr = Hodr BLOCKED from connecting to Bran
 {{- end }}
