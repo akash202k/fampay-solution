@@ -1,0 +1,45 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: alertmanager-ingress
+  namespace: observability
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+
+    # Optional ALB group and naming
+    alb.ingress.kubernetes.io/load-balancer-name: fampay-alb
+    alb.ingress.kubernetes.io/group.name: fampay-shared
+
+    # SSL Configuration
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/certificate-arn: 'arn:aws:acm:us-east-1:982534355700:certificate/f744adec-d79a-4af8-9476-c507f5a7fe9f'
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+
+    # Health Checks (use `/` or `/healthz` if confirmed)
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    alb.ingress.kubernetes.io/healthcheck-path: '/'
+    # alb.ingress.kubernetes.io/healthcheck-port: '80'
+    alb.ingress.kubernetes.io/healthcheck-port: 'traffic-port'
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '15'
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '5'
+    alb.ingress.kubernetes.io/success-codes: '200'
+    alb.ingress.kubernetes.io/healthy-threshold-count: '2'
+    alb.ingress.kubernetes.io/unhealthy-threshold-count: '2'
+
+    # Protocol between ALB and ArgoCD service
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+
+spec:
+  rules:
+    - host: alert.dayxcode.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: monitoring-alertmanager
+                port:
+                  number: 9093
