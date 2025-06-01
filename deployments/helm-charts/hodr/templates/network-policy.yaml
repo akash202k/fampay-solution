@@ -18,8 +18,7 @@ spec:
   ingress:
   {{- if .Values.networkPolicy.allowIngress.fromALB }}
   # Allow ALB/Ingress Controller to reach hodr
-  - from: []
-    ports:
+  - ports:
     - protocol: TCP
       port: {{ .Values.service.targetPort }}
   {{- end }}
@@ -50,12 +49,11 @@ spec:
   {{- end }}
 
   # Egress rules - what hodr can connect TO
-  # NOTE: Hodr CANNOT connect back to Bran (intentionally omitted)
+  # NOTE: ONLY these connections are allowed, everything else blocked
   egress:
   {{- if .Values.networkPolicy.allowEgress.toDNS }}
   # Allow DNS resolution
-  - to: []
-    ports:
+  - ports:
     - protocol: UDP
       port: 53
     - protocol: TCP
@@ -64,11 +62,13 @@ spec:
 
   {{- if .Values.networkPolicy.allowEgress.toExternal }}
   # Allow external API calls
-  - to: []
-    ports:
+  - ports:
     - protocol: TCP
       port: 443
     - protocol: TCP
       port: 80
   {{- end }}
+
+  # NO RULE FOR PORT 8000 to fampay-bran namespace
+  # This should block connection to Bran
 {{- end }}
