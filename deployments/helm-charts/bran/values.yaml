@@ -63,3 +63,24 @@ secrets:
   # timeZone: "UTC"
   external: 
     name: bran-external-secret
+
+
+
+# Network Policy Configuration
+networkPolicy:
+  enabled: true
+  
+  # What can connect TO bran
+  allowIngress:
+    fromALB: true                    # Allow ALB to reach bran
+    fromPrometheus: true             # Allow Prometheus scraping
+    prometheusNamespace: "monitoring"
+  
+  # What bran can connect TO
+  allowEgress:
+    toDatabase: true                 # Allow connection to postgres
+    toHodr: true                     # Allow connection to Hodr
+    toDNS: true                      # Allow DNS resolution
+    toExternal: true                 # Allow external API calls
+    hodrNamespace: "fampay-hodr"     # Hodr's namespace
+    hodrPort: 8080                   # Hodr's port

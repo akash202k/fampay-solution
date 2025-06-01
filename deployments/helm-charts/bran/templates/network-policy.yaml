@@ -1,0 +1,84 @@
+{{- if .Values.networkPolicy.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Values.app.name }}-network-policy
+  namespace: {{ .Values.app.namespace }}
+  labels:
+    app: {{ .Values.app.name }}
+spec:
+  podSelector:
+    matchLabels:
+      app: {{ .Values.app.name }}
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  # Ingress rules - what can connect TO bran
+  ingress:
+  {{- if .Values.networkPolicy.allowIngress.fromALB }}
+  # Allow ALB/Ingress Controller to reach bran
+  - from: []
+    ports:
+    - protocol: TCP
+      port: {{ .Values.service.targetPort }}
+  {{- end }}
+  
+  {{- if .Values.networkPolicy.allowIngress.fromPrometheus }}
+  # Allow Prometheus to scrape metrics
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: {{ .Values.networkPolicy.allowIngress.prometheusNamespace | default "monitoring" }}
+    ports:
+    - protocol: TCP
+      port: {{ .Values.service.targetPort }}
+  {{- end }}
+
+  # Egress rules - what bran can connect TO
+  egress:
+  {{- if .Values.networkPolicy.allowEgress.toDatabase }}
+  # Allow connection to database
+  - to:
+    - podSelector:
+        matchLabels:
+          app: {{ .Values.database.name }}
+    ports:
+    - protocol: TCP
+      port: {{ .Values.database.port }}
+  {{- end }}
+
+  {{- if .Values.networkPolicy.allowEgress.toHodr }}
+  # Allow connection to Hodr service
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: {{ .Values.networkPolicy.allowEgress.hodrNamespace }}
+    - podSelector:
+        matchLabels:
+          app: hodr
+    ports:
+    - protocol: TCP
+      port: {{ .Values.networkPolicy.allowEgress.hodrPort }}
+  {{- end }}
+
+  {{- if .Values.networkPolicy.allowEgress.toDNS }}
+  # Allow DNS resolution
+  - to: []
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+  {{- end }}
+
+  {{- if .Values.networkPolicy.allowEgress.toExternal }}
+  # Allow external API calls
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 80
+  {{- end }}
+{{- end }}
