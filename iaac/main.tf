@@ -44,7 +44,7 @@ module "eks" {
     # On-Demand node group (for critical workloads)
     on_demand = {
       name           = "on-demand-nodes"
-      desired_size   = 3
+      desired_size   = 2
       max_size       = 5
       min_size       = 1
       instance_types = ["t2.medium"] # Slightly better than t2.small

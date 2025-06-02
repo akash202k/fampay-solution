@@ -50,7 +50,6 @@ resource "aws_iam_role_policy_attachment" "aws_load_balancer_controller" {
   role       = aws_iam_role.aws_load_balancer_controller.name
 }
 
-# Optional: More restrictive managed policy (if available)
 # resource "aws_iam_role_policy_attachment" "aws_load_balancer_controller_managed" {
 #   policy_arn = "arn:aws:iam::aws:policy/AWSLoadBalancerControllerIAMPolicy"
 #   role       = aws_iam_role.aws_load_balancer_controller.name
