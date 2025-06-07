@@ -12,27 +12,38 @@ image:
 # Service Configuration
 service:
   type: ClusterIP
-  port: 8080
+  port: 80
   targetPort: 8080
 
 # Deployment Configuration
 deployment:
   replicaCount: 1
   
-# Resources
+# Resources - Configured to trigger Karpenter scaling
 resources:
   limits:
-    cpu: 20m
-    memory: 100Mi
+    cpu: 500m
+    memory: 512Mi
   requests:
-    cpu: 50m
-    memory: 200Mi
+    cpu: 200m      # This will help trigger new nodes
+    memory: 256Mi
 
-# HPA Configuration
+# HPA Configuration - Aggressive for testing
 hpa:
+  enabled: true
   minReplicas: 1
-  maxReplicas: 2
-  targetCPUUtilizationPercentage: 50
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 30
+
+# Karpenter node scheduling
+scheduling:
+  nodeSelector:
+    # No nodeSelector - let it schedule on any available node
+  tolerations:
+    - key: app
+      operator: Equal
+      value: demo-app
+      effect: NoSchedule
 
 # Ingress Configuration
 ingress:
@@ -45,4 +56,3 @@ ingress:
 healthCheck:
   path: /demo-app
   port: 80
-

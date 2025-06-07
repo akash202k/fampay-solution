@@ -1,9 +1,11 @@
-apiVersion: karpenter.k8s.aws/v1
+apiVersion: karpenter.k8s.aws/v1beta1
 kind: EC2NodeClass
 metadata:
-  name: demo-app-nodes
+  name: demo-app-nodeclass
+  namespace: karpenter
 spec:
-  amiFamily: AL2
+  amiFamily: "AL2"
+  role: "KarpenterNodeInstanceProfile-fampay-eks-cluster"
   
   # Subnet discovery
   subnetSelectorTerms:
@@ -14,21 +16,25 @@ spec:
   securityGroupSelectorTerms:
     - tags:
         karpenter.sh/discovery: fampay-eks-cluster
-        
-  # Instance profile for nodes
-  instanceProfile: KarpenterNodeInstanceProfile-fampay-eks-cluster
   
-  # User data for node bootstrapping
-  # userData: |
-  #   #!/bin/bash
-  #   /etc/eks/bootstrap.sh fampay-eks-cluster
-    
-  # Instance store policy
-  instanceStorePolicy: NVME
+  # AMI selection
+  amiSelectorTerms:
+    - tags:
+        karpenter.sh/discovery: fampay-eks-cluster
   
-  # Additional tags for instances
+  # EBS configuration
+  blockDeviceMappings:
+    - deviceName: /dev/xvda
+      ebs:
+        volumeType: gp3
+        encrypted: true
+        volumeSize: "20"
+        deleteOnTermination: true
+  
+  # Tags for instances
   tags:
+    env: demo
     Name: "karpenter-demo-node"
     Environment: "demo"
     ManagedBy: "karpenter"
-    NodePool: "demo-app-pool"
+    NodePool: "demo-app"
