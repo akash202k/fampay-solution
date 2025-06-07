@@ -25,12 +25,12 @@ spec:
       - CreateNamespace=true
     
   # Health checks
-  ignoreDifferences:
-    - group: karpenter.sh
-      kind: NodePool
-      jsonPointers:
-        - /status
-    - group: karpenter.k8s.aws
-      kind: EC2NodeClass  
-      jsonPointers:
-        - /status
+  # ignoreDifferences:
+  #   - group: karpenter.sh
+  #     kind: NodePool
+  #     jsonPointers:
+  #       - /status
+  #   - group: karpenter.k8s.aws
+  #     kind: EC2NodeClass  
+  #     jsonPointers:
+  #       - /status
