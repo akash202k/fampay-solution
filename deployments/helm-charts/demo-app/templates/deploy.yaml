@@ -2,58 +2,43 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: demo-app
-  name: demo-app
-  namespace: demo-app
+    app: {{ .Values.app.name }}
+  name: {{ .Values.app.name }}
+  namespace: {{ .Values.app.namespace }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.deployment.replicaCount }}
   selector:
     matchLabels:
-      app: demo-app
+      app: {{ .Values.app.name }}
   template:
     metadata:
       labels:
-        app: demo-app
+        app: {{ .Values.app.name }}
     spec:
-      # Node selector for Karpenter nodes
-      nodeSelector:
-        node-type: karpenter-demo
-      
-      # Tolerations for Karpenter taints
+      # Tolerations for Karpenter dedicated nodes
       tolerations:
-        - key: demo-app
-          operator: Equal
-          value: "true"
-          effect: NoSchedule
+        {{- toYaml .Values.scheduling.tolerations | nindent 8 }}
       
       containers:
-      - name: demo-app
-        image: public.ecr.aws/q0k4e9h0/karpenter:v1.0.1
-        imagePullPolicy: IfNotPresent
+      - name: {{ .Values.app.name }}
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
-        - containerPort: 8080
+        - containerPort: {{ .Values.service.targetPort }}
         resources:
-          limits:
-            cpu: 500m
-            memory: 512Mi
-          requests:
-            cpu: 200m
-            memory: 256Mi
-        # Add environment variable for load testing
+          {{- toYaml .Values.resources | nindent 10 }}
         env:
         - name: GOMAXPROCS
           value: "2"
-        # Readiness probe
         readinessProbe:
           httpGet:
             path: /
-            port: 8080
+            port: {{ .Values.service.targetPort }}
           initialDelaySeconds: 5
           periodSeconds: 5
-        # Liveness probe  
         livenessProbe:
           httpGet:
             path: /
-            port: 8080
+            port: {{ .Values.service.targetPort }}
           initialDelaySeconds: 15
           periodSeconds: 10
