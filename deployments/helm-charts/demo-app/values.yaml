@@ -43,6 +43,6 @@ ingress:
 
 # Health Check Configuration
 healthCheck:
-  path: /
-  port: 8080
+  path: /demo-app
+  port: 80
 
