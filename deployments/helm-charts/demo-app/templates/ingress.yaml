@@ -37,6 +37,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ .Values.app.name }}
+                name: demo-app-service
                 port:
                   number: {{ .Values.service.port }}
