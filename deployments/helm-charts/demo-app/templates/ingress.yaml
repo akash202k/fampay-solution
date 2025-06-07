@@ -39,4 +39,4 @@ spec:
               service:
                 name: demo-app-service
                 port:
-                  number: {{ .Values.service.port }}
+                  number: 80
