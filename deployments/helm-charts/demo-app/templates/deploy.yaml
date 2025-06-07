@@ -16,5 +16,5 @@ spec:
         app: demo-app
     spec:
       containers:
-      - image: public.ecr.aws/q0k4e9h0/karpenter:v1.0.0
+      - image: public.ecr.aws/q0k4e9h0/karpenter:v1.0.1
         name: karpenter
