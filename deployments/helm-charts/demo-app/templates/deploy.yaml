@@ -15,6 +15,45 @@ spec:
       labels:
         app: demo-app
     spec:
+      # Node selector for Karpenter nodes
+      nodeSelector:
+        node-type: karpenter-demo
+      
+      # Tolerations for Karpenter taints
+      tolerations:
+        - key: demo-app
+          operator: Equal
+          value: "true"
+          effect: NoSchedule
+      
       containers:
-      - image: public.ecr.aws/q0k4e9h0/karpenter:v1.0.1
-        name: karpenter
+      - name: demo-app
+        image: public.ecr.aws/q0k4e9h0/karpenter:v1.0.1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 200m
+            memory: 256Mi
+        # Add environment variable for load testing
+        env:
+        - name: GOMAXPROCS
+          value: "2"
+        # Readiness probe
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        # Liveness probe  
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 10

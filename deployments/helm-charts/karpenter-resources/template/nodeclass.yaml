@@ -1,0 +1,34 @@
+apiVersion: karpenter.k8s.aws/v1beta1
+kind: EC2NodeClass
+metadata:
+  name: demo-app-nodes
+spec:
+  amiFamily: AL2
+  
+  # Subnet discovery
+  subnetSelectorTerms:
+    - tags:
+        karpenter.sh/discovery: fampay-eks-cluster
+  
+  # Security group discovery  
+  securityGroupSelectorTerms:
+    - tags:
+        karpenter.sh/discovery: fampay-eks-cluster
+        
+  # Instance profile for nodes
+  instanceProfile: KarpenterNodeInstanceProfile-fampay-eks-cluster
+  
+  # User data for node bootstrapping
+  # userData: |
+  #   #!/bin/bash
+  #   /etc/eks/bootstrap.sh fampay-eks-cluster
+    
+  # Instance store policy
+  instanceStorePolicy: NVME
+  
+  # Additional tags for instances
+  tags:
+    Name: "karpenter-demo-node"
+    Environment: "demo"
+    ManagedBy: "karpenter"
+    NodePool: "demo-app-pool"
