@@ -5,7 +5,7 @@ metadata:
   namespace: karpenter
 spec:
   amiFamily: "AL2"
-  role: "KarpenterNodeInstanceProfile-fampay-eks-cluster"
+  role: "eks-a8cb9021-171b-85f2-cbcc-c9ea7e18bd58"
   
   # Subnet discovery
   subnetSelectorTerms:
