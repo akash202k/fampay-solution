@@ -19,8 +19,7 @@ spec:
   
   # AMI selection
   amiSelectorTerms:
-    - tags:
-        karpenter.sh/discovery: fampay-eks-cluster
+    - id: ami-03571be2203184664
   
   # EBS configuration
   blockDeviceMappings:
@@ -28,7 +27,7 @@ spec:
       ebs:
         volumeType: gp3
         encrypted: true
-        volumeSize: "20"
+        volumeSize: 20Gi
         deleteOnTermination: true
   
   # Tags for instances
