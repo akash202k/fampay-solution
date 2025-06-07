@@ -1,4 +1,4 @@
-apiVersion: karpenter.sh/v1beta1
+apiVersion: karpenter.sh/v1
 kind: NodePool
 metadata:
   name: demo-app-nodepool
@@ -29,7 +29,7 @@ spec:
       
       # Reference to NodeClass
       nodeClassRef:
-        apiVersion: karpenter.k8s.aws/v1beta1
+        apiVersion: karpenter.k8s.aws/v1
         kind: EC2NodeClass
         name: demo-app-nodeclass
         
