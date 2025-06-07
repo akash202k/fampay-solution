@@ -10,7 +10,7 @@ spec:
   # Subnet discovery
   subnetSelectorTerms:
     - tags:
-        Environment : fampay
+        Environment: fampay
   
   # Security group discovery  
   securityGroupSelectorTerms:
