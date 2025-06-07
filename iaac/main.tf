@@ -111,5 +111,6 @@ module "eks" {
   tags = {
     Environment = "fampay"
     Terraform   = "true"
+    "karpenter.sh/discovery"                   = "fampay-eks-cluster"
   }
 }

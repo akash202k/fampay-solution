@@ -20,6 +20,7 @@ module "vpc" {
   public_subnet_tags = {
     "kubernetes.io/role/elb"                   = "1"
     "kubernetes.io/cluster/fampay-eks-cluster" = "shared"
+    "karpenter.sh/discovery"                   = "fampay-eks-cluster"
   }
 
   tags = {
