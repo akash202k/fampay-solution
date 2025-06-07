@@ -1,0 +1,48 @@
+# Application Configuration
+app:
+  name: demo-app
+  namespace: demo-app
+
+# Image Configuration
+image:
+  repository: public.ecr.aws/q0k4e9h0/karpenter
+  tag: v1.0.0
+  pullPolicy: IfNotPresent
+
+# Service Configuration
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+
+# Deployment Configuration
+deployment:
+  replicaCount: 1
+  
+# Resources
+resources:
+  limits:
+    cpu: 20m
+    memory: 100Mi
+  requests:
+    cpu: 50m
+    memory: 200Mi
+
+# HPA Configuration
+hpa:
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 50
+
+# Ingress Configuration
+ingress:
+  host: dayxcode.com
+  certificateArn: 'arn:aws:acm:us-east-1:982534355700:certificate/f744adec-d79a-4af8-9476-c507f5a7fe9f'
+  loadBalancerName: fampay-alb
+  groupName: fampay-shared
+
+# Health Check Configuration
+healthCheck:
+  path: /
+  port: 8080
+
