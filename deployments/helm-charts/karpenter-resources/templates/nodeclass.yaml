@@ -10,12 +10,12 @@ spec:
   # Subnet discovery
   subnetSelectorTerms:
     - tags:
-        karpenter.sh/discovery: fampay-eks-cluster
+        Environment : fampay
   
   # Security group discovery  
   securityGroupSelectorTerms:
     - tags:
-        karpenter.sh/discovery: fampay-eks-cluster
+        Environment : fampay
   
   # AMI selection
   amiSelectorTerms:
