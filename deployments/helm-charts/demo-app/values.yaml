@@ -6,7 +6,7 @@ app:
 # Image Configuration
 image:
   repository: public.ecr.aws/q0k4e9h0/karpenter
-  tag: v1.0.0
+  tag: v1.0.1
   pullPolicy: IfNotPresent
 
 # Service Configuration
