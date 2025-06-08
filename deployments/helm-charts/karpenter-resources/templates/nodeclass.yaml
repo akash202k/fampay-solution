@@ -5,7 +5,7 @@ metadata:
   namespace: karpenter
 spec:
   amiFamily: "AL2"
-  role: "eks-a8cb9021-171b-85f2-cbcc-c9ea7e18bd58"
+  role: "KarpenterController-20250607124903465000000001"
   
   # Subnet discovery
   subnetSelectorTerms:
