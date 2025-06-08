@@ -393,9 +393,9 @@ resource "kubectl_manifest" "demo_app_nodepool" {
             - key: "karpenter.sh/capacity-type"
               operator: In
               values: ["spot", "on-demand"]
-            - key: "karpenter.k8s.aws/instance-category"
-              operator: In
-              values: ["c", "m", "r"]
+            # - key: "karpenter.k8s.aws/instance-category"
+            #   operator: In
+            #   values: ["c", "m", "r"]
           
           taints:
             - key: app
