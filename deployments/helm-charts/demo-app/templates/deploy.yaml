@@ -1,44 +1,37 @@
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: demo-app
+  namespace: demo-app
   labels:
-    app: {{ .Values.app.name }}
-  name: {{ .Values.app.name }}
-  namespace: {{ .Values.app.namespace }}
+    app: demo-app
 spec:
-  replicas: {{ .Values.deployment.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
-      app: {{ .Values.app.name }}
+      app: demo-app
   template:
     metadata:
       labels:
-        app: {{ .Values.app.name }}
+        app: demo-app
     spec:
-      # Tolerations for Karpenter dedicated nodes
+      nodeSelector:
+        karpenter.sh/nodepool: demo-app-nodepool
       tolerations:
-        {{- toYaml .Values.scheduling.tolerations | nindent 8 }}
-      
+        - key: app
+          operator: Equal
+          value: demo-app
+          effect: NoSchedule
       containers:
-      - name: {{ .Values.app.name }}
-        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
+      - name: demo-app
+        image: public.ecr.aws/q0k4e9h0/karpenter:v1.0.1
         ports:
-        - containerPort: {{ .Values.service.targetPort }}
+        - containerPort: 8080
         resources:
-          {{- toYaml .Values.resources | nindent 10 }}
-        env:
-        - name: GOMAXPROCS
-          value: "2"
-        readinessProbe:
-          httpGet:
-            path: /
-            port: {{ .Values.service.targetPort }}
-          initialDelaySeconds: 5
-          periodSeconds: 5
-        livenessProbe:
-          httpGet:
-            path: /
-            port: {{ .Values.service.targetPort }}
-          initialDelaySeconds: 15
-          periodSeconds: 10
+          requests:
+            cpu: 500m
+            memory: 512Mi
+          limits:
+            cpu: 1000m
+            memory: 1Gi

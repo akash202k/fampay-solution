@@ -80,12 +80,12 @@ resource "aws_iam_role_policy_attachment" "ebs_csi_driver_custom_policy" {
 resource "kubernetes_annotations" "ebs_csi_controller_sa" {
   api_version = "v1"
   kind        = "ServiceAccount"
-  
+
   metadata {
     name      = "ebs-csi-controller-sa"
     namespace = "kube-system"
   }
-  
+
   annotations = {
     "eks.amazonaws.com/role-arn" = aws_iam_role.ebs_csi_driver.arn
   }

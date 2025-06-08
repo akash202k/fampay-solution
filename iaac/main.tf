@@ -28,11 +28,11 @@ module "eks" {
       most_recent = true
     }
 
-   aws-ebs-csi-driver = {
-    most_recent = true
-    service_account_role_arn = aws_iam_role.ebs_csi_driver.arn
-    # Remove the configuration_values section completely
-  }
+    aws-ebs-csi-driver = {
+      most_recent              = true
+      service_account_role_arn = aws_iam_role.ebs_csi_driver.arn
+      # Remove the configuration_values section completely
+    }
 
     # EKS Pod Identity Agent - For improved IRSA (OPTIONAL but recommended)
     eks-pod-identity-agent = {
@@ -109,8 +109,8 @@ module "eks" {
   }
 
   tags = {
-    Environment = "fampay"
-    Terraform   = "true"
-    "karpenter.sh/discovery"                   = "fampay-eks-cluster"
+    Environment              = "fampay"
+    Terraform                = "true"
+    "karpenter.sh/discovery" = "fampay-eks-cluster"
   }
 }

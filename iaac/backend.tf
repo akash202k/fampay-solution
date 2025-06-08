@@ -14,6 +14,10 @@ terraform {
       source  = "hashicorp/helm"
       version = "~> 2.10"
     }
+    kubectl = {
+      source  = "gavinbunney/kubectl"
+      version = "~> 1.14.0" # New provider for Karpenter
+    }
   }
 
   # Your existing backend configuration
