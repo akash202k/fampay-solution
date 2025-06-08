@@ -1,4 +1,9 @@
-
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo-app
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -30,8 +35,8 @@ spec:
         - containerPort: 8080
         resources:
           requests:
-            cpu: 500m
-            memory: 512Mi
+            cpu: 100m      # REDUCED: Now 200m + 180m overhead = 380m total
+            memory: 256Mi  # REDUCED
           limits:
-            cpu: 1000m
-            memory: 1Gi
+            cpu: 200m      # REDUCED
+            memory: 312Mi  # REDUCED
