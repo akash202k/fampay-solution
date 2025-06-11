@@ -27,6 +27,7 @@ prometheus:
     
   # Enable node exporter for host metrics
   nodeExporter:
+    affinity: {}
     enabled: true
     hostRootfs: true
     hostPID: true
