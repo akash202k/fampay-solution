@@ -1,32 +1,32 @@
-# apiVersion: argoproj.io/v1alpha1
-# kind: Application
-# metadata:
-#   name: demo-app
-#   namespace: argocd
-#   labels:
-#     app: demo-app
-#     environment: dev
-# spec:
-#   project: default
-#   source:
-#     repoURL: https://github.com/akash202k/fampay-solution  # Update this
-#     path: deployments/helm-charts/demo-app
-#     targetRevision: HEAD
-#     helm: {}
-#   destination:
-#     server: https://kubernetes.default.svc
-#     namespace: demo-app
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: demo-app
+  namespace: argocd
+  labels:
+    app: demo-app
+    environment: dev
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/akash202k/fampay-solution  # Update this
+    path: deployments/helm-charts/demo-app
+    targetRevision: HEAD
+    helm: {}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: demo-app
   
-#   syncPolicy:
-#     automated:
-#       prune: true
-#       selfHeal: true
-#     syncOptions:
-#       - CreateNamespace=true
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
     
-#   # Health checks
-#   ignoreDifferences:
-#     - group: apps
-#       kind: Deployment
-#       jsonPointers:
-#         - /spec/replicas
+  # Health checks
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      jsonPointers:
+        - /spec/replicas
